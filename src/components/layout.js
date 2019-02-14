@@ -1,37 +1,49 @@
-import React from "react"
-import PropTypes from "prop-types"
-import { Link } from "gatsby"
-import { connect } from "react-redux"
+import React from "react";
+import PropTypes from "prop-types";
+import { Link } from "gatsby";
+import { connect } from "react-redux";
+import { Helmet } from "react-helmet";
 
 const Counter = ({ count, increment }) => (
   <div>
     <p>Count: {count}</p>
     <button onClick={increment}>Increment</button>
   </div>
-)
+);
 
 Counter.propTypes = {
   count: PropTypes.number.isRequired,
-  increment: PropTypes.func.isRequired,
-}
+  increment: PropTypes.func.isRequired
+};
 
 const mapStateToProps = ({ count }) => {
-  return { count }
-}
+  return { count };
+};
 
 const mapDispatchToProps = dispatch => {
-  return { increment: () => dispatch({ type: `INCREMENT` }) }
-}
+  return { increment: () => dispatch({ type: `INCREMENT` }) };
+};
 
 const ConnectedCounter = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Counter)
+)(Counter);
+
+const SEOComponent = ({ title }) => (
+  <Helmet>
+    <title>{title}</title>
+  </Helmet>
+);
+
+const ConnectedSEOComponent = connect(state => {
+  return { title: state.seoTitle };
+})(SEOComponent);
 
 class DefaultLayout extends React.Component {
   render() {
     return (
       <div>
+        <ConnectedSEOComponent />
         <Link to="/">
           <h3>Redux example</h3>
         </Link>
@@ -49,8 +61,8 @@ class DefaultLayout extends React.Component {
         </ul>
         {this.props.children}
       </div>
-    )
+    );
   }
 }
 
-export default DefaultLayout
+export default DefaultLayout;
